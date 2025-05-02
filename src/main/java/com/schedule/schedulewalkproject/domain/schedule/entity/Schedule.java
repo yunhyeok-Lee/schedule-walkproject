@@ -26,12 +26,15 @@ public class Schedule extends BaseEntity {
 	@Column(nullable = false)
 	private String content;
 
+	// @ManyToOne
+	// @JoinColumn(name = "user_id")
+	// private User user;
+
 	public Schedule() {
 
 	}
 
-	public Schedule(Long id, String title, String content) {
-		this.id = id;
+	public Schedule(String title, String content) {
 		this.title = title;
 		this.content = content;
 	}
