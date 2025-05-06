@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatRequestDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleListResponseDto;
+import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.service.ScheduleService;
 
 @RestController   // @Controller + @ResponseBody
@@ -41,16 +42,16 @@ public class ScheduleController {
 		return ResponseEntity.ok().body(scheduleResponseDto);
 	}
 	// 3. 단건 일정 조회
-	@GetMapping("/schedule/{id}")
-	public ResponseEntity<ScheduleCreatResponseDto> findbyId(@PathVariable Long id){
+	@GetMapping("/{id}")
+	public ResponseEntity<ScheduleResponseDto> findbyId(@PathVariable Long id){
 
-		ScheduleCreatResponseDto scheduleResponseDto = scheduleService.findbyId();
+		ScheduleResponseDto scheduleResponseDto = scheduleService.findbyId(id);
 
 		return ResponseEntity.ok().body(scheduleResponseDto);
 	}
 
 	// 4. 일정 수정
-	@PatchMapping("/schedule/{id}")
+	@PatchMapping("/{id}")
 	public ResponseEntity<ScheduleCreatResponseDto> update(@RequestBody ScheduleCreatRequestDto scheduleRequestDto) {
 
 		ScheduleCreatResponseDto scheduleResponseDto = scheduleService.update(scheduleRequestDto);

@@ -1,6 +1,7 @@
 package com.schedule.schedulewalkproject.domain.schedule.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -26,13 +27,14 @@ public class ScheduleService {
 
 		Schedule savedSchedule = scheduleRepository.save(schedule);
 
-		return new ScheduleCreatResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContent(),savedSchedule.getCreatedAt(),savedSchedule.getUpdatedAt());
+		return new ScheduleCreatResponseDto(savedSchedule.getId(), savedSchedule.getTitle(), savedSchedule.getContent(),
+			savedSchedule.getCreatedAt(), savedSchedule.getUpdatedAt());
 
 	}
 	/*
-	* 2. 일정 전체 조회
-	  * DB에서 모든 Schedule 데이터를 전체 조회해서 List에 저장
-	  * 조회한 Schedule 엔티티 리스트를  Dto List로 변환 (stream 사용)
+	 * 2. 일정 전체 조회
+	 * DB에서 모든 Schedule 데이터를 전체 조회해서 List에 저장
+	 * 조회한 Schedule 엔티티 리스트를  Dto List로 변환 (stream 사용)
 	 */
 
 	public ScheduleListResponseDto findAll() {
@@ -51,18 +53,35 @@ public class ScheduleService {
 		return new ScheduleListResponseDto(scheduleDtos);
 	}
 
-	public ScheduleCreatResponseDto findbyId() {
+	/*
+	 3. 일정 단건 조회
+	 */
+	public ScheduleResponseDto findbyId(Long id) {
+		Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
 
-		return null;
+		Schedule schedule = optionalSchedule.get();
+
+		return new ScheduleResponseDto(
+			schedule.getId(),
+			schedule.getTitle(),
+			schedule.getContent(),
+			schedule.getCreatedAt(),
+			schedule.getUpdatedAt()
+		);
 	}
 
+	/*
+	 4. 일정 수정
+	 */
 	public ScheduleCreatResponseDto update(ScheduleCreatRequestDto scheduleRequestDto) {
 		return null;
 	}
 
+	/*
+	 5. 일정 삭제
+	 */
 	public void delete(Long id) {
 
 	}
-
 
 }
