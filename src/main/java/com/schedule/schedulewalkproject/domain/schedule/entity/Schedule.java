@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 
 import com.schedule.schedulewalkproject.common.entity.BaseEntity;
+import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleUpdateRequestDto;
 
 @Getter
 @Entity
@@ -36,6 +37,12 @@ public class Schedule extends BaseEntity {
 
 	public Schedule(String title, String content) {
 		this.title = title;
+		this.content = content;
+	}
+
+	// update
+	public void updateSchedule(String title, String content){
+		this.title =title;
 		this.content = content;
 	}
 

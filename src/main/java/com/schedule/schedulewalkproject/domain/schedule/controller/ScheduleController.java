@@ -15,6 +15,7 @@ import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatRequest
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleListResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleResponseDto;
+import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleUpdateRequestDto;
 import com.schedule.schedulewalkproject.domain.schedule.service.ScheduleService;
 
 @RestController   // @Controller + @ResponseBody
@@ -37,9 +38,9 @@ public class ScheduleController {
 	@GetMapping // 전체 조회
 	public ResponseEntity<ScheduleListResponseDto> findAll(){
 
-		ScheduleListResponseDto scheduleResponseDto = scheduleService.findAll();
+		ScheduleListResponseDto scheduleListResponseDto = scheduleService.findAll();
 
-		return ResponseEntity.ok().body(scheduleResponseDto);
+		return ResponseEntity.ok().body(scheduleListResponseDto);
 	}
 	// 3. 단건 일정 조회
 	@GetMapping("/{id}")
@@ -52,9 +53,11 @@ public class ScheduleController {
 
 	// 4. 일정 수정
 	@PatchMapping("/{id}")
-	public ResponseEntity<ScheduleCreatResponseDto> update(@RequestBody ScheduleCreatRequestDto scheduleRequestDto) {
+	public ResponseEntity<ScheduleResponseDto> updateSchedule(
+		@PathVariable Long id,
+		@RequestBody ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
 
-		ScheduleCreatResponseDto scheduleResponseDto = scheduleService.update(scheduleRequestDto);
+		ScheduleResponseDto scheduleResponseDto = scheduleService.updateSchedule(id ,scheduleUpdateRequestDto);
 
 		return ResponseEntity.ok().body(scheduleResponseDto);
 	}
