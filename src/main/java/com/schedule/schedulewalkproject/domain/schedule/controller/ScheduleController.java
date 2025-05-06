@@ -33,7 +33,7 @@ public class ScheduleController {
 	}
 
 	// 2. 일정 전체 조회
-	@GetMapping("/schedule")  // 전체 조회
+	@GetMapping // 전체 조회
 	public ResponseEntity<ScheduleListResponseDto> findAll(){
 
 		ScheduleListResponseDto scheduleResponseDto = scheduleService.findAll();
