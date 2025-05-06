@@ -61,12 +61,12 @@ public class ScheduleController {
 
 		return ResponseEntity.ok().body(scheduleResponseDto);
 	}
+	// 5. 일정 삭제
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-	// @DeleteMapping("/schedule/{id}")
-	// public ResponseEntity<ScheduleCreatResponseDto> delete(@PathVariable Long id) {
-	//
-	// 	scheduleService.delete(id);
-	//
-	// 	return ResponseEntity.ok().body();
-	// }
+		scheduleService.delete(id);
+
+		return ResponseEntity.ok().body(null);
+	}
 }

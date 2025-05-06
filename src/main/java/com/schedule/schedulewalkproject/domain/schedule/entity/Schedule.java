@@ -46,4 +46,7 @@ public class Schedule extends BaseEntity {
 		this.content = content;
 	}
 
+	public void delete(Schedule schedule) {
+
+	}
 }
