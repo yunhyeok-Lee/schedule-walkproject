@@ -81,8 +81,11 @@ public class CommentService {
 	 */
 	public CommentResponseDto updateComment(Long id, CommentUpdateRequestDto commentUpdateRequestDto) {
 
+	Comment comment = commentRepository.findById(id)
+		.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
 
-	return null;
+	comment.updateComment(commentUpdateRequestDto.getContent());
+	return new CommentResponseDto(comment.getId(),comment.getContent(),comment.getCreatedAt(),comment.getUpdatedAt());
 	}
 
 
