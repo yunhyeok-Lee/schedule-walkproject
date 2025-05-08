@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.schedule.schedulewalkproject.domain.comment.dto.CommentCreatRequestDto;
 import com.schedule.schedulewalkproject.domain.comment.dto.CommentCreatResponseDto;
@@ -19,13 +20,13 @@ import com.schedule.schedulewalkproject.domain.comment.service.CommentService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/schedules/{scheduleId}/comments")
 public class CommentController {
 
 	private final CommentService commentService;
 
-
 	// 1. 댓글 작성
-	@PostMapping("/schedules/{scheduleId}/comments")
+	@PostMapping
 	public ResponseEntity<CommentCreatResponseDto> save(
 		@PathVariable Long scheduleId,
 		@RequestBody CommentCreatRequestDto commentCreatRequestDto) {
@@ -35,9 +36,8 @@ public class CommentController {
 		return ResponseEntity.ok().body(responseDto);
 	}
 
-
 	// 2. 댓글 전체 조회
-	@GetMapping("/schedules/{scheduleId}/comments")
+	@GetMapping
 	public ResponseEntity<CommentListResponseDto> findAll() {
 
 		CommentListResponseDto commentListResponseDto = commentService.findAll();
@@ -45,16 +45,17 @@ public class CommentController {
 		return ResponseEntity.ok().body(commentListResponseDto);
 	}
 
-	@GetMapping
-	public ResponseEntity<CommentResponseDto> findbyId(@PathVariable Long id){
+	// 3. 댓글 상세 조회
+	@GetMapping("/{id}")
+	public ResponseEntity<CommentResponseDto> findbyId(@PathVariable Long id) {
 
 		CommentResponseDto commentResponseDto = commentService.findbyId(id);
 
 		return ResponseEntity.ok().body(commentResponseDto);
 	}
 
-	// 3. 댓글 수정
-	@PatchMapping("/schedules/{scheduleId}/comments/{id}")
+	// 4. 댓글 수정
+	@PatchMapping("/{id}")
 	public ResponseEntity<CommentResponseDto> updateComment(
 		@PathVariable Long id,
 		@RequestBody CommentUpdateRequestDto commentUpdateRequestDto) {
@@ -64,8 +65,9 @@ public class CommentController {
 		return ResponseEntity.ok().body(commentResponseDto);
 	}
 
-	@DeleteMapping()
-	public ResponseEntity<Void> deleteComment(@PathVariable Long id){
+	// 5. 댓글 삭제
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
 		commentService.delete(id);
 
 		return ResponseEntity.ok().body(null);
