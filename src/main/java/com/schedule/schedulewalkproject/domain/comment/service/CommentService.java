@@ -77,16 +77,24 @@ public class CommentService {
 		);
 	}
 	/*
-	 * 3. 댓글 수정
+	 * 4. 댓글 수정
 	 */
 	public CommentResponseDto updateComment(Long id, CommentUpdateRequestDto commentUpdateRequestDto) {
 
 	Comment comment = commentRepository.findById(id)
-		.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+		.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
 	comment.updateComment(commentUpdateRequestDto.getContent());
 	return new CommentResponseDto(comment.getId(),comment.getContent(),comment.getCreatedAt(),comment.getUpdatedAt());
 	}
 
+	/*
+	 * 5. 댓글 삭제
+	 */
+	public void delete(Long id) {
+		Comment comment = commentRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
+		commentRepository.delete(comment);
+
+	}
 }

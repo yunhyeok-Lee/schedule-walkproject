@@ -3,6 +3,7 @@ package com.schedule.schedulewalkproject.domain.comment.controller;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,5 +62,12 @@ public class CommentController {
 		CommentResponseDto commentResponseDto = commentService.updateComment(id, commentUpdateRequestDto);
 
 		return ResponseEntity.ok().body(commentResponseDto);
+	}
+
+	@DeleteMapping()
+	public ResponseEntity<Void> deleteComment(@PathVariable Long id){
+		commentService.delete(id);
+
+		return ResponseEntity.ok().body(null);
 	}
 }
