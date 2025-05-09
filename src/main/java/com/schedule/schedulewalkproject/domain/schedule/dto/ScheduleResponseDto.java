@@ -13,6 +13,7 @@ public class ScheduleResponseDto {
 	private final LocalDateTime createdAt;
 	private final LocalDateTime updatedAt;
 
+
 	public ScheduleResponseDto(Long id, String title, String content, LocalDateTime createdAt,
 		LocalDateTime updatedAt) {
 		this.id = id;
@@ -21,4 +22,5 @@ public class ScheduleResponseDto {
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
+
 }

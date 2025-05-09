@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import com.schedule.schedulewalkproject.domain.comment.dto.CommentResponseDto;
+import com.schedule.schedulewalkproject.domain.comment.entity.Comment;
+import com.schedule.schedulewalkproject.domain.comment.repository.CommentRepository;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatRequestDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleListResponseDto;
@@ -24,6 +27,7 @@ import com.schedule.schedulewalkproject.domain.schedule.repository.ScheduleRepos
 public class ScheduleService {
 
 	private final ScheduleRepository scheduleRepository;
+	private final CommentRepository commentRepository;
 
 	// 1. 일정 생성 service
 	public ScheduleCreatResponseDto save(ScheduleCreatRequestDto scheduleRequestDto) {
@@ -68,6 +72,8 @@ public class ScheduleService {
 
 		 Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
 
+
+
 		 if(optionalSchedule.isEmpty()){
 			 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 		 }
@@ -81,6 +87,8 @@ public class ScheduleService {
 			findschedule.getCreatedAt(),
 			findschedule.getUpdatedAt()
 		);
+
+
 	}
 
 	/*
