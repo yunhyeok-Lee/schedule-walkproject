@@ -28,22 +28,20 @@ public class Comment extends BaseEntity {
 	private String content;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "schedule_id")
+	@JoinColumn(name = "schedule_id",nullable = false)
 	private Schedule schedule;
 
 	public Comment(){
 	}
 
-	public Comment(String content){
+	public Comment(String content, Schedule schedule){
 		this.content = content;
+		this.schedule = schedule;
 	}
 
 	//update
 	public void updateComment(String content){
 		this.content = content;
 	}
-
-
-
 
 }

@@ -14,8 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
 import com.schedule.schedulewalkproject.domain.comment.dto.CommentResponseDto;
 import com.schedule.schedulewalkproject.domain.comment.entity.Comment;
 import com.schedule.schedulewalkproject.domain.comment.repository.CommentRepository;
+import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCountResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatRequestDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatResponseDto;
+import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleDetailResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleListResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleUpdateRequestDto;
@@ -50,17 +52,34 @@ public class ScheduleService {
 	public ScheduleListResponseDto findAll() {
 		List<Schedule> schedules = scheduleRepository.findAll();
 
-		List<ScheduleResponseDto> scheduleDtos = schedules.stream()
-			.map(schedule -> new ScheduleResponseDto(
-				// 각 Schedule 객체를 -> ScheduleResponseDto 객체로 변환
-				schedule.getId(),
-				schedule.getTitle(),
-				schedule.getContent(),
-				schedule.getCreatedAt(),
-				schedule.getUpdatedAt()
-			))
-			.collect(Collectors.toList()); // 변환된 dto 객체들을 전부 리스트로 모아준다.
-		return new ScheduleListResponseDto(scheduleDtos);
+		// List<ScheduleResponseDto> scheduleDtos = schedules.stream()
+		// 	.map(schedule -> new ScheduleResponseDto(
+		// 		// 각 Schedule 객체를 -> ScheduleResponseDto 객체로 변환
+		// 		schedule.getId(),
+		// 		schedule.getTitle(),
+		// 		schedule.getContent(),
+		// 		schedule.getCreatedAt(),
+		// 		schedule.getUpdatedAt()
+		// 	))
+		// 	.collect(Collectors.toList()); // 변환된 dto 객체들을 전부 리스트로 모아준다.
+		// return new ScheduleListResponseDto(scheduleDtos);
+
+
+		List<ScheduleCountResponseDto> scheduleCountResponseDtos = schedules.stream()
+			.map(schedule -> {
+				Long commentCount = commentRepository.countByScheduleId(schedule.getId());
+					return new ScheduleCountResponseDto(
+						schedule.getId(),
+						schedule.getTitle(),
+						schedule.getContent(),
+						schedule.getCreatedAt(),
+						schedule.getUpdatedAt(),
+						commentCount
+					);
+			})
+			.collect(Collectors.toList());
+
+		return new ScheduleListResponseDto(scheduleCountResponseDtos);
 	}
 
 	/*
@@ -68,26 +87,49 @@ public class ScheduleService {
 	 * 일정 상세 조회 시, 해당 일정에 작성된 모든 댓글 목록을 함께 조회
 	 * 댓글 목록은 작성일 기준 오름차순 (작성 오래된 순)으로 정렬
 	 */
-	public ScheduleResponseDto findbyId(Long id) {
+	// public ScheduleResponseDto findbyId(Long id) {
+	//
+	// 	 Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
+	//
+	//
+	//
+	// 	 if(optionalSchedule.isEmpty()){
+	// 		 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+	// 	 }
+	//
+	// 	 Schedule findschedule = optionalSchedule.get();
+	//
+	// 	return new ScheduleResponseDto(
+	// 		findschedule.getId(),
+	// 		findschedule.getTitle(),
+	// 		findschedule.getContent(),
+	// 		findschedule.getCreatedAt(),
+	// 		findschedule.getUpdatedAt()
+	// 	);
 
-		 Optional<Schedule> optionalSchedule = scheduleRepository.findById(id);
+	public ScheduleDetailResponseDto findbyId(Long id) {
+		Schedule schedule = scheduleRepository.findById(id)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+		List<Comment> comments = commentRepository.findByScheduleIdOrderByContentAsc(id);
 
+		List<CommentResponseDto> commentResponseDtos = comments.stream()
+			.map(comment -> new CommentResponseDto(
+				comment.getId(),
+				comment.getContent(),
+				comment.getCreatedAt(),
+				comment.getUpdatedAt()
+			))
+			.collect(Collectors.toList());
 
-		 if(optionalSchedule.isEmpty()){
-			 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		 }
-
-		 Schedule findschedule = optionalSchedule.get();
-
-		return new ScheduleResponseDto(
-			findschedule.getId(),
-			findschedule.getTitle(),
-			findschedule.getContent(),
-			findschedule.getCreatedAt(),
-			findschedule.getUpdatedAt()
+		return new ScheduleDetailResponseDto(
+			schedule.getId(),
+			schedule.getTitle(),
+			schedule.getContent(),
+			schedule.getCreatedAt(),
+			schedule.getUpdatedAt(),
+			commentResponseDtos
 		);
-
 
 	}
 

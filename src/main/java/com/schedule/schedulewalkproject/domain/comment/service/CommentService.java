@@ -16,12 +16,15 @@ import com.schedule.schedulewalkproject.domain.comment.dto.CommentResponseDto;
 import com.schedule.schedulewalkproject.domain.comment.dto.CommentUpdateRequestDto;
 import com.schedule.schedulewalkproject.domain.comment.entity.Comment;
 import com.schedule.schedulewalkproject.domain.comment.repository.CommentRepository;
+import com.schedule.schedulewalkproject.domain.schedule.entity.Schedule;
+import com.schedule.schedulewalkproject.domain.schedule.repository.ScheduleRepository;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 
 	private final CommentRepository commentRepository;
+	private final ScheduleRepository scheduleRepository;
 
 	/*
 	 * 1. 댓글 작성
@@ -29,7 +32,10 @@ public class CommentService {
 	 */
 	public CommentCreatResponseDto save(Long scheduleId, CommentCreatRequestDto commentCreatRequestDto) {
 
-		Comment comment = new Comment(commentCreatRequestDto.getContent());
+		Schedule schedule = scheduleRepository.findById(scheduleId)
+			.orElseThrow(()-> new IllegalArgumentException("해당일정이 존재하지 않습니다."));
+
+		Comment comment = new Comment(commentCreatRequestDto.getContent(), schedule);
 
 		Comment savedComment = commentRepository.save(comment);
 
