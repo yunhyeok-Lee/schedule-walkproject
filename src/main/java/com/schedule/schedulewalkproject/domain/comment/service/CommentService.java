@@ -33,7 +33,7 @@ public class CommentService {
 	public CommentCreatResponseDto save(Long scheduleId, CommentCreatRequestDto commentCreatRequestDto) {
 
 		Schedule schedule = scheduleRepository.findById(scheduleId)
-			.orElseThrow(()-> new IllegalArgumentException("해당일정이 존재하지 않습니다."));
+			.orElseThrow(()-> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
 
 		Comment comment = new Comment(commentCreatRequestDto.getContent(), schedule);
 
