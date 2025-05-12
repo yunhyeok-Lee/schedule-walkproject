@@ -13,10 +13,10 @@ import com.schedule.schedulewalkproject.domain.comment.dto.CommentResponseDto;
 @AllArgsConstructor
 public class ScheduleDetailResponseDto {
 
-	private Long id;
-	private String title;
-	private String content;
-	private LocalDateTime createdAt;
-	private LocalDateTime updatedAt;
-	private List<CommentResponseDto> commentResponseDtos;
+	private final Long id;
+	private final String title;
+	private final String content;
+	private final LocalDateTime createdAt;
+	private final LocalDateTime updatedAt;
+	private final List<CommentResponseDto> commentResponseDtos;
 }
