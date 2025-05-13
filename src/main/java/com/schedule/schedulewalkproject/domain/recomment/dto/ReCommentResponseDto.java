@@ -2,6 +2,9 @@ package com.schedule.schedulewalkproject.domain.recomment.dto;
 
 import java.time.LocalDateTime;
 
+import lombok.Getter;
+
+@Getter
 public class ReCommentResponseDto {
 
 	private final Long id;

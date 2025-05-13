@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.schedule.schedulewalkproject.domain.recomment.dto.ReCommentCreatRequestDto;
 import com.schedule.schedulewalkproject.domain.recomment.dto.ReCommentCreatResponseDto;
 import com.schedule.schedulewalkproject.domain.recomment.dto.ReCommentResponseDto;
@@ -17,9 +18,9 @@ import com.schedule.schedulewalkproject.domain.recomment.dto.ReCommentUpdateRequ
 import com.schedule.schedulewalkproject.domain.recomment.entity.ReComment;
 import com.schedule.schedulewalkproject.domain.recomment.service.ReCommentService;
 
-@Getter
+@RestController
 @AllArgsConstructor
-@RequestMapping("/schedules/{scheduleId}/{commentId}/recomments")
+@RequestMapping("/schedules/{scheduleId}/comments/{commentId}/recomments")
 public class ReCommentController {
 
 	private final ReCommentService reCommentService;

@@ -14,6 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 import com.schedule.schedulewalkproject.domain.comment.dto.CommentResponseDto;
 import com.schedule.schedulewalkproject.domain.comment.entity.Comment;
 import com.schedule.schedulewalkproject.domain.comment.repository.CommentRepository;
+import com.schedule.schedulewalkproject.domain.recomment.dto.ReCommentResponseDto;
+import com.schedule.schedulewalkproject.domain.recomment.entity.ReComment;
+import com.schedule.schedulewalkproject.domain.recomment.repository.ReCommentRepository;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCountResponseDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatRequestDto;
 import com.schedule.schedulewalkproject.domain.schedule.dto.ScheduleCreatResponseDto;
@@ -30,6 +33,7 @@ public class ScheduleService {
 
 	private final ScheduleRepository scheduleRepository;
 	private final CommentRepository commentRepository;
+	private final ReCommentRepository reCommentRepository;
 
 	// 1. 일정 생성 service
 	public ScheduleCreatResponseDto save(ScheduleCreatRequestDto scheduleRequestDto) {
@@ -114,14 +118,29 @@ public class ScheduleService {
 		List<Comment> comments = commentRepository.findByScheduleIdOrderByContentAsc(id);
 
 		List<CommentResponseDto> commentResponseDtos = comments.stream()
-			.map(comment -> new CommentResponseDto(
-				comment.getId(),
-				comment.getContent(),
-				comment.getCreatedAt(),
-				comment.getUpdatedAt()
-			))
-			.collect(Collectors.toList());
+			.map(comment -> {
+				// 대댓글 가져오기
+				List<ReComment> reComments = reCommentRepository.findByParentcommentIdOrderByCreatedAtAsc(id);
 
+				List<ReCommentResponseDto> reCommentResponseDtos = reComments.stream()
+					.map(reComment -> new ReCommentResponseDto(
+						reComment.getId(),
+						reComment.getContent(),
+						reComment.getCreatedAt(),
+						reComment.getUpdatedAt()
+					))
+					.collect(Collectors.toList());
+
+				return new CommentResponseDto(
+					comment.getId(),
+					comment.getContent(),
+					comment.getCreatedAt(),
+					comment.getUpdatedAt(),
+					reCommentResponseDtos
+				);
+
+			})
+			.collect(Collectors.toList());
 		return new ScheduleDetailResponseDto(
 			schedule.getId(),
 			schedule.getTitle(),
@@ -130,6 +149,24 @@ public class ScheduleService {
 			schedule.getUpdatedAt(),
 			commentResponseDtos
 		);
+
+		// List<CommentResponseDto> commentResponseDtos = comments.stream()
+		// 	.map(comment -> new CommentResponseDto(
+		// 		comment.getId(),
+		// 		comment.getContent(),
+		// 		comment.getCreatedAt(),
+		// 		comment.getUpdatedAt()
+		// 	))
+		// 	.collect(Collectors.toList());
+		//
+		// return new ScheduleDetailResponseDto(
+		// 	schedule.getId(),
+		// 	schedule.getTitle(),
+		// 	schedule.getContent(),
+		// 	schedule.getCreatedAt(),
+		// 	schedule.getUpdatedAt(),
+		// 	commentResponseDtos
+		// );
 
 	}
 

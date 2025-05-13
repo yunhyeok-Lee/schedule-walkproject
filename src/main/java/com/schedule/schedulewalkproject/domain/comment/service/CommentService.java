@@ -1,5 +1,6 @@
 package com.schedule.schedulewalkproject.domain.comment.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -16,6 +17,7 @@ import com.schedule.schedulewalkproject.domain.comment.dto.CommentResponseDto;
 import com.schedule.schedulewalkproject.domain.comment.dto.CommentUpdateRequestDto;
 import com.schedule.schedulewalkproject.domain.comment.entity.Comment;
 import com.schedule.schedulewalkproject.domain.comment.repository.CommentRepository;
+import com.schedule.schedulewalkproject.domain.recomment.entity.ReComment;
 import com.schedule.schedulewalkproject.domain.schedule.entity.Schedule;
 import com.schedule.schedulewalkproject.domain.schedule.repository.ScheduleRepository;
 
@@ -57,7 +59,8 @@ public class CommentService {
 				comment.getId(),
 				comment.getContent(),
 				comment.getCreatedAt(),
-				comment.getUpdatedAt()
+				comment.getUpdatedAt(),
+				Collections.emptyList()
 			))
 			.collect(Collectors.toList());
 		return new CommentListResponseDto(commentResponseDtos);
@@ -79,7 +82,8 @@ public class CommentService {
 			findcomment.getId(),
 			findcomment.getContent(),
 			findcomment.getCreatedAt(),
-			findcomment.getUpdatedAt()
+			findcomment.getUpdatedAt(),
+			Collections.emptyList()
 		);
 	}
 	/*
@@ -91,7 +95,7 @@ public class CommentService {
 		.orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
 
 	comment.updateComment(commentUpdateRequestDto.getContent());
-	return new CommentResponseDto(comment.getId(),comment.getContent(),comment.getCreatedAt(),comment.getUpdatedAt());
+	return new CommentResponseDto(comment.getId(),comment.getContent(),comment.getCreatedAt(),comment.getUpdatedAt(),Collections.emptyList());
 	}
 
 	/*
