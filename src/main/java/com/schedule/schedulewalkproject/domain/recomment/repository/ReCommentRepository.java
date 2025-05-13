@@ -8,4 +8,5 @@ import com.schedule.schedulewalkproject.domain.recomment.entity.ReComment;
 public interface ReCommentRepository extends JpaRepository<ReComment, Long> {
 
 	List<ReComment> findByParentcommentIdOrderByCreatedAtAsc(Long parentCommentId);
+
 }

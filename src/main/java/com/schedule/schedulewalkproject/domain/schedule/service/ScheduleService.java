@@ -68,18 +68,17 @@ public class ScheduleService {
 		// 	.collect(Collectors.toList()); // 변환된 dto 객체들을 전부 리스트로 모아준다.
 		// return new ScheduleListResponseDto(scheduleDtos);
 
-
 		List<ScheduleCountResponseDto> scheduleCountResponseDtos = schedules.stream()
 			.map(schedule -> {
 				Long commentCount = commentRepository.countByScheduleId(schedule.getId());
-					return new ScheduleCountResponseDto(
-						schedule.getId(),
-						schedule.getTitle(),
-						schedule.getContent(),
-						schedule.getCreatedAt(),
-						schedule.getUpdatedAt(),
-						commentCount
-					);
+				return new ScheduleCountResponseDto(
+					schedule.getId(),
+					schedule.getTitle(),
+					schedule.getContent(),
+					schedule.getCreatedAt(),
+					schedule.getUpdatedAt(),
+					commentCount
+				);
 			})
 			.collect(Collectors.toList());
 
@@ -120,7 +119,8 @@ public class ScheduleService {
 		List<CommentResponseDto> commentResponseDtos = comments.stream()
 			.map(comment -> {
 				// 대댓글 가져오기
-				List<ReComment> reComments = reCommentRepository.findByParentcommentIdOrderByCreatedAtAsc(id);
+				List<ReComment> reComments = reCommentRepository.findByParentcommentIdOrderByCreatedAtAsc(
+					comment.getId());
 
 				List<ReCommentResponseDto> reCommentResponseDtos = reComments.stream()
 					.map(reComment -> new ReCommentResponseDto(
@@ -174,23 +174,25 @@ public class ScheduleService {
 	 4. 일정 수정
 	 */
 	@Transactional
-	public ScheduleResponseDto updateSchedule(Long id ,ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
+	public ScheduleResponseDto updateSchedule(Long id, ScheduleUpdateRequestDto scheduleUpdateRequestDto) {
 
 		Schedule schedule = scheduleRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
 
 		schedule.updateSchedule(scheduleUpdateRequestDto.getTitle(), scheduleUpdateRequestDto.getContent());
 
-		return new ScheduleResponseDto(schedule.getId(),schedule.getTitle(),schedule.getContent(),schedule.getCreatedAt(),schedule.getUpdatedAt());
+		return new ScheduleResponseDto(schedule.getId(), schedule.getTitle(), schedule.getContent(),
+			schedule.getCreatedAt(), schedule.getUpdatedAt());
 	}
 
 	/*
 	 5. 일정 삭제
 	 */
 	public void delete(Long id) {
-		Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+		Schedule schedule = scheduleRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
 
-		 scheduleRepository.delete(schedule);
+		scheduleRepository.delete(schedule);
 
 	}
 
